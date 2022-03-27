@@ -13,6 +13,6 @@ test('tuit list renders async', async () => {
     </HashRouter>
   );
 
-  const tuit = screen.getByText(/NASAScience/i);
+  const tuit = screen.getByText(/Dragon/i);
   expect(tuit).toBeInTheDocument();
 });

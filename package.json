@@ -1,6 +1,7 @@
 {
   "name": "full-stack-developer-web",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@testing-library/react": "^12.1.2",
