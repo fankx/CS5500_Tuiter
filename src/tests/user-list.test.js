@@ -3,6 +3,7 @@ import { screen, render } from '@testing-library/react';
 import { HashRouter } from 'react-router-dom';
 import { findAllUsers } from '../services/users-service';
 import axios from 'axios';
+import { createUser } from './services';
 
 jest.mock('axios');
 
@@ -21,7 +22,6 @@ const MOCKED_USERS = [
   },
 ];
 
-// Testing user interfaces rendering with static data
 test('user list renders static user array', () => {
   render(
     <HashRouter>
@@ -32,11 +32,22 @@ test('user list renders static user array', () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-// Mocking RESTful Web service APIs to isolate user interface tests
+test('user list renders async', async () => {
+  const users = await findAllUsers();
+  render(
+    <HashRouter>
+      <UserList users={users} />
+    </HashRouter>
+  );
+  const linkElement = screen.getByText(/alice/i);
+  expect(linkElement).toBeInTheDocument();
+});
+
 test('user list renders mocked', async () => {
   axios.get.mockImplementation(() =>
     Promise.resolve({ data: { users: MOCKED_USERS } })
   );
+
   const response = await findAllUsers();
   const users = response.users;
 
