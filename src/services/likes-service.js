@@ -16,3 +16,9 @@ export const findAllUsersThatLikedTuit = (tid) =>
 
 export const userLikesTuit = (uid, tid) =>
   api.put(`${USERS_API}/${uid}/likes/${tid}`).then((response) => response.data);
+
+export const checkIfLike = (uid, tid) => {
+  return api
+    .get(`${USERS_API}/${uid}/likes/${tid}`)
+    .then((response) => response.data);
+};

@@ -1,6 +1,42 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import { checkIfLike } from '../../services/likes-service';
+import { checkIfDislike } from '../../services/dislikes-service';
 
-const TuitStats = ({ tuit, likeTuit = () => {} }) => {
+const TuitStats = ({ tuit, likeTuit = () => {}, dislikeTuit = () => {} }) => {
+  const [isliked, setLiked] = useState([]);
+  const [isdisliked, setDisliked] = useState([]);
+
+  useEffect(() => {
+    checkLike();
+    checkDislike();
+  }, []);
+
+  const checkLike = async () => {
+    let liked = await checkIfLike('me', tuit._id);
+    liked ? setLiked(true) : setLiked(false);
+  };
+  const checkDislike = async () => {
+    let disliked = await checkIfDislike('me', tuit._id);
+    disliked ? setDisliked(true) : setDisliked(false);
+  };
+
+  useEffect(() => {
+    checkLike();
+    checkDislike();
+  }, []);
+
+  const likeHandler = async () => {
+    await likeTuit(tuit);
+    await checkLike();
+    await checkDislike();
+  };
+  const disikeHandler = async () => {
+    await dislikeTuit(tuit);
+    await checkLike();
+    await checkDislike();
+  };
+
   return (
     <div className='row mt-2'>
       <div className='col'>
@@ -14,8 +50,8 @@ const TuitStats = ({ tuit, likeTuit = () => {} }) => {
       </div>
 
       <div className='col'>
-        <span onClick={() => likeTuit(tuit)}>
-          {tuit.stats && tuit.stats.likes && tuit.stats.likes > 0 ? (
+        <span onClick={() => likeHandler()}>
+          {isliked ? (
             <i
               className='fa-solid fa-thumbs-up me-1'
               style={{ color: 'red' }}
@@ -24,6 +60,20 @@ const TuitStats = ({ tuit, likeTuit = () => {} }) => {
             <i className='fa-light fa-thumbs-up me-1'></i>
           )}
           {tuit.stats && tuit.stats.likes}
+        </span>
+      </div>
+
+      <div className='col'>
+        <span onClick={() => disikeHandler()}>
+          {isdisliked ? (
+            <i
+              className='fa-solid fa-thumbs-down me-1'
+              style={{ color: 'red' }}
+            ></i>
+          ) : (
+            <i className='fa-light fa-thumbs-down me-1'></i>
+          )}
+          {tuit.stats && tuit.stats.dislikes}
         </span>
       </div>
 
