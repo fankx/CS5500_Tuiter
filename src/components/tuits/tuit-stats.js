@@ -24,10 +24,10 @@ const TuitStats = ({ tuit, likeTuit = () => {}, dislikeTuit = () => {} }) => {
     }
   };
 
-  // useEffect(() => {
-  //   checkLike();
-  //   checkDislike();
-  // }, []);
+  useEffect(() => {
+    checkLike();
+    checkDislike();
+  }, []);
 
   const likeHandler = async () => {
     await likeTuit(tuit);
